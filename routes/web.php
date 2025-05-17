@@ -53,6 +53,11 @@ Route::middleware(['user.session'])->group(function () {
 
     Route::get('/pinjaman/searchNasabah', [PinjamanController::class, 'searchNasabah'])->name('pinjaman.searchNasabah');
     Route::get('/pinjaman/GetAnggotaByKtp', [PinjamanController::class, 'GetAnggotaByKtp'])->name('pinjaman.GetAnggotaByKtp');
+    // Route untuk generate kwitansi PDF tunggal berdasarkan kode_pinjaman
+    Route::get('/pinjaman/kwitansi/{kode_pinjaman}/pdf', [PinjamanController::class, 'generateKwitansiPdf'])->name('pinjaman.kwitansi.single');
+
+    // Route untuk generate kwitansi PDF multiple (zipped) berdasarkan array kode_pinjaman
+    Route::post('/pinjaman/kwitansi/multiple/pdf', [PinjamanController::class, 'generateMultipleKwitansiPdf'])->name('pinjaman.kwitansi.multiple');
 
 // Route::controller(AuthController::class)->group(function () {
 //     Route::get('/login', 'login_show');

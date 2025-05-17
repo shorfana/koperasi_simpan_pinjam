@@ -994,6 +994,117 @@
             resetForm();
         });
     </script>
+       <script>
+    // Event listener untuk checkbox "Pilih Semua"
+    document.getElementById('selectAll').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.row-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+
+    // Event listener untuk tombol Download Kwitansi (per baris)
+    document.querySelectorAll('.generate-single-kwitansi').forEach(button => {
+        button.addEventListener('click', function() {
+            const kodePinjaman = this.dataset.kodePinjaman;
+            window.location.href = `/pinjaman/kwitansi/${kodePinjaman}/pdf`; // Langsung arahkan browser ke URL download
+        });
+    });
+
+    // Event listener untuk tombol Generate Kwitansi Terpilih
+    document.getElementById('generateSelectedKwitansi').addEventListener('click', function() {
+        const selectedKodePinjaman = [];
+        document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
+            selectedKodePinjaman.push(checkbox.value);
+        });
+
+        if (selectedKodePinjaman.length === 0) {
+            alert('Pilih setidaknya satu pinjaman untuk generate kwitansi.');
+            return;
+        }
+
+        if (selectedKodePinjaman.length === 1) {
+            // Jika hanya satu yang dipilih, panggil fungsi single generate (redirect)
+            window.location.href = `/pinjaman/kwitansi/${selectedKodePinjaman[0]}/pdf`;
+        } else {
+            // Jika lebih dari satu, kirim kode_pinjaman ke backend untuk di-zip
+            // Ini akan mengunduh file ZIP dari backend
+            fetch('/pinjaman/kwitansi/multiple/pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ kode_pinjaman: selectedKodePinjaman })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message || 'Server error'); });
+                }
+                return response.blob(); // Menerima blob (binary data)
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `kwitansi_pinjaman_selected_${new Date().toISOString().slice(0,10)}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                alert('File zip kwitansi sedang diunduh.');
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Gagal menggenerate dan men-zip kwitansi. Silakan coba lagi. Error: ' + error.message);
+            });
+        }
+    });
+
+    // Event listener untuk tombol Generate Semua Kwitansi
+    document.getElementById('generateAllKwitansi').addEventListener('click', function() {
+        const allKodePinjaman = [];
+        document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+            allKodePinjaman.push(checkbox.value);
+        });
+
+        if (allKodePinjaman.length === 0) {
+            alert('Tidak ada pinjaman untuk generate kwitansi.');
+            return;
+        }
+
+        // Kirim semua ID ke backend untuk di-zip
+        fetch('/pinjaman/kwitansi/multiple/pdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ kode_pinjaman: allKodePinjaman })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message || 'Server error'); });
+            }
+            return response.blob(); // Menerima blob (binary data)
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `kwitansi_pinjaman_all_${new Date().toISOString().slice(0,10)}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            alert('File zip semua kwitansi sedang diunduh.');
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('Gagal menggenerate dan men-zip semua kwitansi. Silakan coba lagi. Error: ' + error.message);
+        });
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

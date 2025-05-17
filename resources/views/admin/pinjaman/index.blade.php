@@ -17,7 +17,7 @@
     </button>
 </div>
 
-<div class="card">
+{{-- <div class="card">
     <div class="card-header">
         <h3 class="card-title">Data Pinjaman</h3>
     </div>
@@ -65,6 +65,69 @@
                         <td>{{ $item->modifiedby ?? '-' }}</td>
                         <td>
                             <button class="btn btn-sm btn-primary">Edit</button>
+                            <button class="btn btn-sm btn-danger">Hapus</button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div> --}}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Data Pinjaman</h3>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <button class="btn btn-success" id="generateSelectedKwitansi">Generate Kwitansi Terpilih</button>
+            <button class="btn btn-info" id="generateAllKwitansi">Generate Semua Kwitansi</button>
+        </div>
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll"></th> {{-- Checkbox untuk pilih semua --}}
+                    <th>NAMA PETUGAS </th>
+                    <th>NAMA NASABAH</th>
+                    <th>NIK</th>
+                    <th>KOTA</th>
+                    <th>KECAMATAN</th>
+                    <th>NO PENSIUN</th>
+                    <th>PLAFOND (BESAR PINJAMAN)</th>
+                    <th>TANGGAL JATUH TEMPO</th>
+                    <th>TANGGAL DIBUAT</th>
+                    <th>DIBUAT OLEH</th>
+                    <th>TANGGAL DIUBAH</th>
+                    <th>DIUBAH OLEH</th>
+                    <th>AKSI</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($pinjaman as $item)
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" value="{{ $item->kode_pinjaman }}"></td> {{-- Value dari kode_pinjaman --}}
+                        <td>{{ $item->createdby ?? '-' }}</td>
+                        <td>{{ $item->nama_nasabah }}</td> {{-- Menggunakan accessor --}}
+                        <td>{{ $item->nik_nasabah  }}</td> {{-- Menggunakan accessor --}}
+                        <td>{{ $item->kota_nasabah }}</td> {{-- Menggunakan accessor --}}
+                        <td>{{ $item->kecamatan_nasabah }}</td> {{-- Menggunakan accessor --}}
+                        <td>{{ $item->no_pensiun_nasabah }}</td> {{-- Menggunakan accessor --}}
+                        <td>
+                            {{ $item->nominal_pinjaman ? 'Rp ' . number_format($item->nominal_pinjaman, 0, ',', '.') : '-' }}{{-- Menggunakan accessor --}}
+                        </td>
+                        <td>
+                            {{ $item->tgl_jatuh_tempo ? \Carbon\Carbon::parse($item->tgl_jatuh_tempo)->format('d-m-Y') : '-' }}
+                        </td>
+                        <td>
+                            {{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') : '-' }}
+                        </td>
+                        <td>{{ $item->createdby ?? '-' }}</td>
+                        <td>
+                            {{ $item->modifiedon ? \Carbon\Carbon::parse($item->modifiedon)->format('d-m-Y') : '-' }}
+                        </td>
+                        <td>{{ $item->modifiedby ?? '-' }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary generate-single-kwitansi" data-kode-pinjaman="{{ $item->kode_pinjaman }}">Kwitansi</button>
+                            <button class="btn btn-sm btn-info">Edit</button>
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </td>
                     </tr>
@@ -194,7 +257,6 @@
         </div>
     </div>
 </div>
-
 
 
 

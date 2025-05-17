@@ -11,11 +11,11 @@
     });
 </script>
 @endif
-<div style="text-align: left; padding: 10px;">
+{{-- <div style="text-align: left; padding: 10px;">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-tambah">
         Tambah Pinjaman
     </button>
-</div>
+</div> --}}
 
 {{-- <div class="card">
     <div class="card-header">
@@ -79,6 +79,9 @@
     </div>
     <div class="card-body">
         <div class="mb-3">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-tambah">
+                Tambah Pinjaman
+            </button>
             <button class="btn btn-success" id="generateSelectedKwitansi">Generate Kwitansi Terpilih</button>
             <button class="btn btn-info" id="generateAllKwitansi">Generate Semua Kwitansi</button>
         </div>

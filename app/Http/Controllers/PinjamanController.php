@@ -9,6 +9,7 @@ use App\Models\Pinjaman;
 use Carbon\Carbon;
 use ZipArchive;
 use Barryvdh\DomPDF\Facade\Pdf; // Pastikan ini diimpor
+use Illuminate\Support\Facades\Storage;
 
 class PinjamanController extends Controller
 {

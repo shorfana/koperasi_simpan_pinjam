@@ -116,25 +116,30 @@
             size: A4 landscape;
             margin: 3mm;
         }
+        td.logo-column {
+            width: 150px; /* atau sesuaikan */
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="width: 20%; vertical-align: middle;">
-                <img src="{{ $logo1_base64 }}" alt="Logo 1" style="height: 35px;">
-                </td>
-                <td style="width: 60%; text-align: center; vertical-align: middle;">
-                <h4 style="margin: 0; font-size: 12px;">KOPERASI SIMPAN PINJAM HIDUP BERSAMA MANDIRI</h4>
-                <p style="margin: 0; font-size: 8px;">Jin Paseh No. 223. Kel Tuguraja Kec Cihideung Kota Tasikmalaya (08112114016)</p>
-                </td>
-                <td style="width: 20%; text-align: right; vertical-align: middle;">
-                <img src="{{ $logo2_base64 }}" alt="Logo 2" style="height: 35px;">
-                </td>
-            </tr>
+                <tr>
+                    <td class="logo-column" style="width: 20%; vertical-align: middle;">
+                        <img src="{{ $logo1_base64 }}" alt="Logo 1" style="height: 70px; width: auto;">
+                    </td>
+                    <td style="width: 60%; text-align: center; vertical-align: middle;">
+                        <h4 style="margin: 0; font-size: 12px;">KOPERASI SIMPAN PINJAM HIDUP BERSAMA MANDIRI</h4>
+                        <p style="margin: 0; font-size: 8px;">Jin Paseh No. 223. Kel Tuguraja Kec Cihideung Kota Tasikmalaya (08112114016)</p>
+                    </td>
+                    <td class="logo-column" style="width: 20%; text-align: right; vertical-align: middle;">
+                        <img src="{{ $logo2_base64 }}" alt="Logo 2" style="height: 70px; width: auto;">
+                    </td>
+                </tr>
             </table>
+
         </div>
 
         <div class="title">KWITANSI PINJAMAN ANGGOTA LAMA</div>

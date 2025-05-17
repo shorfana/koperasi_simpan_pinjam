@@ -12,17 +12,17 @@
 </script>
 @endif
 
-<div style="text-align: left; padding: 10px;">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
-        Tambah Users
-    </button>
-</div>
 
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Data Users</h3>
     </div>
     <div class="card-body">
+        <div class="mb-3">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
+                Tambah Users
+            </button>
+        </div>
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>

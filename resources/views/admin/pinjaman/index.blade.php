@@ -79,9 +79,12 @@
     </div>
     <div class="card-body">
         <div class="mb-3">
+
+            @if(session('user')->role != 'PETUGAS_BANK')
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-tambah">
                 Tambah Pinjaman
             </button>
+            @endif
             <button class="btn btn-success" id="generateSelectedKwitansi">Generate Kwitansi Terpilih</button>
             <button class="btn btn-info" id="generateAllKwitansi">Generate Semua Kwitansi</button>
         </div>
@@ -128,11 +131,17 @@
                             {{ $item->modifiedon ? \Carbon\Carbon::parse($item->modifiedon)->format('d-m-Y') : '-' }}
                         </td>
                         <td>{{ $item->modifiedby ?? '-' }}</td>
+                        @if(session('user')->role != 'PETUGAS_BANK')
                         <td>
                             <button class="btn btn-sm btn-primary generate-single-kwitansi" data-kode-pinjaman="{{ $item->kode_pinjaman }}">Kwitansi</button>
                             <button class="btn btn-sm btn-info">Edit</button>
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </td>
+                        @else
+                        <td>
+                            <button class="btn btn-sm btn-primary generate-single-kwitansi" data-kode-pinjaman="{{ $item->kode_pinjaman }}">Kwitansi</button>
+                        </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>

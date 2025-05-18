@@ -13,9 +13,26 @@ use Illuminate\Support\Facades\Storage;
 
 class PinjamanController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
         // $pinjaman = DB::select('SELECT * FROM vw_informasi_pinjaman');
+        $pinjaman = Pinjaman::with('anggota')->get();
+        return view('admin.pinjaman.index', [
+            'title' => 'Data Pinjaman',
+            'pinjaman' => $pinjaman
+        ]);
+    }
+
+    public function show_bank()
+    {
+        $pinjaman = Pinjaman::with('anggota')->get();
+        return view('admin.pinjaman.index', [
+            'title' => 'Data Pinjaman',
+            'pinjaman' => $pinjaman
+        ]);
+    }
+
+    public function informasiPinjamanB(){
         $pinjaman = Pinjaman::with('anggota')->get();
         return view('admin.pinjaman.index', [
             'title' => 'Data Pinjaman',
@@ -102,8 +119,8 @@ class PinjamanController extends Controller
                 'jasa_pelayanan'            => $jasa_pelayanan,
                 'buku_anggota'              => $buku_anggota,
                 'materai'                   => $materai,
-                'persentase_provinsi'       => $persentase_provisi,
-                'provinsi'                  => $provisi,
+                'persentase_provisi'       => $persentase_provisi,
+                'provisi'                  => $provisi,
                 'angsuran_per_bulan'        => $angsuran,
                 'penerimaan_bersih'         => $penerimaan_bersih,
                 'tanggal_lunas'             => Carbon::parse($request->tgl_realisasi)->addMonths($request->lama_pinjaman)->format('Y-m-d'),

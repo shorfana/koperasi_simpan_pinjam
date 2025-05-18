@@ -6,6 +6,7 @@ use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PinjamanController;
+use App\Http\Controllers\BankPersenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,9 @@ use App\Http\Controllers\PinjamanController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 // Route::get('/dashboard', [DashboardController::class, 'show']);
 // Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
 // Route yang butuh login session
@@ -42,11 +43,23 @@ Route::middleware(['user.session'])->group(function () {
     });
     Route::controller(PinjamanController::class)->group(function () {
         Route::get('/pinjaman', 'index');  // Tampilkan semua pinjaman
+        Route::get('/informasi-pinjaman', 'show_bank');  // Tampilkan semua pinjaman
+        Route::get('/informasi-pinjaman', 'informasiPinjamanB');  // Tampilkan semua pinjaman
         Route::post('/pinjaman', 'store')->name('pinjaman.store');  // Simpan pinjaman baru
 
         // Tambahan route search nasabah dan get anggota by ktp
         // Route::get('/pinjaman/search-nasabah', 'searchNasabah')->name('pinjaman.searchNasabah');
         // Route::get('/pinjaman/get-anggota-by-ktp', 'GetAnggotaByKtp')->name('pinjaman.GetAnggotaByKtp');
+    });
+    Route::controller(BankPersenController::class)->group(function () {
+        Route::get('/bank-persen', 'show')->name('bank-persen.show');
+        Route::post('/bank-persen', 'store')->name('bank-persen.store');
+        Route::post('/bank-persen/update', 'update')->name('bank-persen.update');
+        Route::delete('/bank-persen/delete', 'destroy')->name('bank-persen.destroy');
+        // Route::get('/bank-persen', 'show')->name('bank-persen.show');            // Tampilkan semua user
+        // Route::post('/bank-persen/update', 'update')->name('bank-persen.update');           // Simpan user baru
+        // // Route::post('/users-update', 'update')->name('users.update');   // Update user
+        // Route::delete('/bank-persen/delete', 'destroy')->name('bank-persen.destroy'); // Hapus user
     });
 });
 
@@ -66,7 +79,7 @@ Route::middleware(['user.session'])->group(function () {
 //     // // Route::post('/orders', 'store');
 // });
 Route::controller(AuthController::class)->group(function () {
-    Route::get('/login', 'login_show')->middleware('guest.user')->name('login');
+    Route::get('/', 'login_show')->middleware('guest.user')->name('login');
     Route::post('/login', 'login_process')->name('login.process');
     Route::get('/logout', 'logout')->name('logout');
     Route::get('/register', 'register_show')->name('register');

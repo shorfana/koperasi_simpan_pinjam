@@ -196,37 +196,49 @@
               <p>DASHBOARD</p>
             </a>
           </li>
+          {{-- MASTER USER - Hanya ADMIN --}}
+          @if(session('user')->role == 'ADMIN')
           <li class="nav-item">
-            <a href="{{ route('users.index') }}"
-            class="nav-link {{ request()->is('users') ? 'active' : '' }}">
+            <a href="{{ route('users.index') }}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-user"></i>
                 <p>MASTER USER</p>
             </a>
           </li>
-
-          <li class="nav-item {{ request()->is('anggota-data') || request()->is('history-data') ? 'menu-open' : '' }}">
+          @endif
+          {{-- MASTER BANK PERSEN - Hanya ADMIN --}}
+          @if(session('user')->role == 'ADMIN')
+          <li class="nav-item">
+            <a href="{{ route('bank-persen.show') }}" class="nav-link {{ request()->is('bank-persen') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-percentage"></i>
+                <p>MASTER BANK PERSEN</p>
+            </a>
+          </li>
+          @endif
+            {{-- ANGGOTA - Tidak ditampilkan untuk PETUGAS_BANK --}}
+            @if(session('user')->role != 'PETUGAS_BANK')
+            <li class="nav-item {{ request()->is('anggota-data') || request()->is('history-data') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ request()->is('anggota-data') || request()->is('history-data') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
+                <i class="nav-icon fas fa-users"></i>
+                <p>
                 ANGGOTA
                 <i class="right fas fa-angle-left"></i>
-              </p>
+                </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+                <li class="nav-item">
                 <a href="/anggota-data" class="nav-link {{ request()->is('anggota-data') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Data</p>
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Data</p>
                 </a>
-              </li>
-              <li class="nav-item">
+                </li>
+                <li class="nav-item">
                 <a href="/history-data" class="nav-link {{ request()->is('history-data') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>History</p>
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>History</p>
                 </a>
-              </li>
+                </li>
             </ul>
-          </li>
+            </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-database"></i>
@@ -256,8 +268,10 @@
               </li> -->
             </ul>
           </li>
-          <li class="nav-item {{ request()->is('pinjaman') || request()->is('jenis-pinjaman') || request()->is('pembayaran') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ request()->is('pinjaman') || request()->is('jenis-pinjaman') || request()->is('pembayaran') ? 'active' : '' }}">
+            @endif
+            {{-- PINJAMAN --}}
+            <li class="nav-item {{ request()->is('pinjaman') || request()->is('jenis-pinjaman') || request()->is('pembayaran') || request()->is('informasi-pinjaman') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->is('pinjaman') || request()->is('jenis-pinjaman') || request()->is('pembayaran') || request()->is('informasi-pinjaman') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-credit-card"></i>
                 <p>
                 PINJAMAN
@@ -265,6 +279,8 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
+                {{-- Informasi Pinjaman - tidak untuk PETUGAS_BANK --}}
+                @if(session('user')->role != 'PETUGAS_BANK')
                 <li class="nav-item">
                 <a href="/pinjaman" class="nav-link {{ request()->is('pinjaman') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
@@ -283,8 +299,22 @@
                     <p>Pembayaran</p>
                 </a>
                 </li>
+                @endif
+
+                {{-- Informasi Pinjaman Bank - semua bisa lihat --}}
+                <li class="nav-item">
+                <a href="/informasi-pinjaman" class="nav-link {{ request()->is('informasi-pinjaman') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                @if(session('user')->role != 'PETUGAS_BANK')
+                    <p>Informasi Pinjaman Bank</p>
+                @else
+                    <p>Informasi Pinjaman</p>
+                @endif
+                </a>
+                </li>
             </ul>
             </li>
+
 
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
@@ -362,6 +392,7 @@
               </li>
             </ul>
           </li> -->
+            @if(session('user')->role != 'PETUGAS_BANK')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-university"></i>
@@ -415,6 +446,7 @@
               </li> -->
             </ul>
           </li>
+            @endif
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-arrow-down"></i>

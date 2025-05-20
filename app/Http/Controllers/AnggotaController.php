@@ -58,7 +58,9 @@ class AnggotaController extends Controller
             'kelurahan' => $request->kelurahan,
             'alamat' => $request->alamat,
             'no_pensiun' => $request->no_pensiun,
+            'gaji' => $request->gaji,
             'jenis_pensiun' => $request->jenis_pensiun,
+            'simpanan_pokok' => $request->simpanan_pokok,
             'foto' => json_encode($fotoNama), // simpan sebagai JSON string
             'type' => $request->type,
             'status' => $request->status,

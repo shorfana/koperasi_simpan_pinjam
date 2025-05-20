@@ -139,7 +139,7 @@
                         </td>
                         @else
                         <td>
-                            <button class="btn btn-sm btn-primary generate-single-kwitansi" data-kode-pinjaman="{{ $item->kode_pinjaman }}">Kwitansi</button>
+                            <button class="btn btn-sm btn-primary generate-single-kwitansi-bank" data-kode-pinjaman="{{ $item->kode_pinjaman }}">Kwitansi</button>
                         </td>
                         @endif
                     </tr>
@@ -188,6 +188,10 @@
                             <div class="form-group">
                                 <label>Alamat</label>
                                 <input name="alamat" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Simpanan Pokok</label>
+                                <input name="simpanan_pokok" class="form-control">
                             </div>
                         </div>
 

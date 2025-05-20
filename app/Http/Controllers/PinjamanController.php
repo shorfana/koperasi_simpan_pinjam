@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\BankPersen;
 use App\Models\Anggota;
 use App\Models\Pinjaman;
 use Carbon\Carbon;
 use ZipArchive;
 use Barryvdh\DomPDF\Facade\Pdf; // Pastikan ini diimpor
 use Illuminate\Support\Facades\Storage;
+use DateTime;
+use DateInterval;
 
 class PinjamanController extends Controller
 {
@@ -47,7 +50,24 @@ class PinjamanController extends Controller
         try {
             // Cek apakah anggota sudah ada berdasarkan NIK
             $anggota = Anggota::where('ktp', $request->nik)->first();
-
+            //PPerhitungan persentase
+            $usia = $this->hitungUsia($request->tgl_lahir, $request->tgl_realisasi);
+            $persentase_dpu = $this->hitungPersentaseDPU($request->tgl_lahir, $request->tgl_realisasi);
+            $angsuran = $this->hitungCicilan($request->nominal_pinjaman, $request->lama_pinjaman);
+            $penerimaan_bersih = $this->hitungPenerimaanBersih(
+                $request->nominal_pinjaman,
+                $request->tgl_lahir,
+                $request->tgl_realisasi,
+                $request->lama_pinjaman,
+                $request->tabungan ?? 0
+            );
+            $sisa_gaji = $request->gaji_awal - $angsuran;
+            $persentase_provisi = $this->hitungPersentaseProvisi($request->lama_pinjaman);
+            $provisi = $this->hitungProvisi($request->nominal_pinjaman, $request->lama_pinjaman);
+            $dpu_asuransi = $this->hitungDPU($request->nominal_pinjaman, $request->tgl_lahir, $request->tgl_realisasi);
+            $jasa_pelayanan = round($this->hitungJasa($request->nominal_pinjaman));
+            $buku_anggota = $this->hitungBuku();
+            $materai = $this->hitungMaterai();
             // Jika tidak ada, insert anggota baru
             if (!$anggota) {
                 $anggota = Anggota::create([
@@ -67,6 +87,8 @@ class PinjamanController extends Controller
                     'alamat'           => $request->alamat,
                     'no_pensiun'       => $request->no_pensiun,
                     'jenis_pensiun'    => $request->jenis_pensiun,
+                    'gaji'             => $sisa_gaji,
+                    'simpanan_pokok'    => $request->simpanan_pokok,
                     'type'             => 'pensiunan',
                     'status'           => 'aktif',
                     'is_deleted'       => '0',
@@ -75,24 +97,7 @@ class PinjamanController extends Controller
                 ]);
             }
 
-            //PPerhitungan persentase
-            $usia = $this->hitungUsia($request->tgl_lahir, $request->tgl_realisasi);
-            $persentase_dpu = $this->hitungPersentaseDPU($request->tgl_lahir, $request->tgl_realisasi);
-            $angsuran = $this->hitungCicilan($request->nominal_pinjaman, $request->lama_pinjaman);
-            $penerimaan_bersih = $this->hitungPenerimaanBersih(
-                $request->nominal_pinjaman,
-                $request->tgl_lahir,
-                $request->tgl_realisasi,
-                $request->lama_pinjaman,
-                $request->tabungan ?? 0
-            );
-            $sisa_gaji = $request->gaji_awal - $angsuran;
-            $persentase_provisi = $this->hitungPersentaseProvisi($request->lama_pinjaman);
-            $provisi = $this->hitungProvisi($request->nominal_pinjaman, $request->lama_pinjaman);
-            $dpu_asuransi = $this->hitungDPU($request->nominal_pinjaman, $request->tgl_lahir, $request->tgl_realisasi);
-            $jasa_pelayanan = round($this->hitungJasa($request->nominal_pinjaman));
-            $buku_anggota = $this->hitungBuku();
-            $materai = $this->hitungMaterai();
+
             //End perhitungan persentase
             // Insert ke tabel Pinjaman
             Pinjaman::create([
@@ -208,7 +213,9 @@ class PinjamanController extends Controller
                 'kelurahan',
                 'alamat',
                 'no_pensiun',
-                'jenis_pensiun'
+                'jenis_pensiun',
+                'simpanan_pokok',
+                'gaji'
             )
             ->first();
 
@@ -285,42 +292,114 @@ class PinjamanController extends Controller
         return $plafond - $dpu - $jasa - $buku - $materai - $provisi - $tabungan;
     }
 
-    // public function prosesSimulasi($request)
-    // {
-    //     $usia = $this->hitungUsia($request->tgl_lahir, $request->tgl_realisasi);
-    //     $persentase_dpu = $this->hitungPersentaseDPU($request->tgl_lahir, $request->tgl_realisasi);
-    //     $angsuran = $this->hitungCicilan($request->nominal_pinjaman, $request->lama_pinjaman);
-    //     $penerimaan_bersih = $this->hitungPenerimaanBersih(
-    //         $request->nominal_pinjaman,
-    //         $request->tgl_lahir,
-    //         $request->tgl_realisasi,
-    //         $request->lama_pinjaman,
-    //         $request->tabungan ?? 0
-    //     );
-    //     $sisa_gaji = $request->gaji_awal - $angsuran;
+    public function generateBankKwitansiPdf(Request $request, $kode_pinjaman)
+    {
+        // Ambil data pinjaman berdasarkan kode_pinjaman
+        $pinjaman = Pinjaman::with('anggota')->findOrFail($kode_pinjaman);
+        $dataAnggota = Anggota::where('no_anggota', $pinjaman->no_anggota)
+            ->select(
+                'ktp',
+                'nama',
+                'tgl_lahir',
+                'nohp',
+                'provinsi',
+                'kota',
+                'kecamatan',
+                'kelurahan',
+                'alamat',
+                'no_pensiun',
+                'jenis_pensiun',
+                'simpanan_pokok',
+                'gaji',
+            )
+            ->first();
+        $bankPersen = BankPersen::first();
+        // Pastikan session('user') ada sebelum mengakses properti 'name'
+        $petugasName = session('user')->name ?? 'DIANA';
 
-    //     return [
-    //         'persentase_dpu'              => $persentase_dpu . '%',
-    //         'usia_masuk'                  => $usia . ' TAHUN',
-    //         'angsuran_per_bulan'          => 'Rp ' . number_format($angsuran, 0, ',', '.'),
-    //         'sisa_gaji'                   => 'Rp ' . number_format($sisa_gaji, 0, ',', '.'),
-    //         'penerimaan_bersih'           => 'Rp ' . number_format($penerimaan_bersih, 0, ',', '.'),
-    //         'dpu_asuransi'                => 'Rp ' . number_format($this->hitungDPU($request->nominal_pinjaman, $request->tgl_lahir, $request->tgl_realisasi), 0, ',', '.'),
-    //         'jasa_pelayanan'              => 'Rp ' . number_format(round($this->hitungJasa($request->nominal_pinjaman)), 0, ',', '.'),
-    //         'buku_anggota'                => 'Rp ' . number_format($this->hitungBuku(), 0, ',', '.'),
-    //         'materai'                    => 'Rp ' . number_format($this->hitungMaterai(), 0, ',', '.'),
-    //         'persentase_provinsi'          => $this->hitungPersentaseProvisi($request->lama_pinjaman) . '%',
-    //         'provisi'                    => 'Rp ' . number_format($this->hitungProvisi($request->nominal_pinjaman, $request->lama_pinjaman), 0, ',', '.'),
-    //         'tanggal_lunas'              => Carbon::parse($request->tgl_realisasi)->addMonths($request->lama_pinjaman)->format('d/m/Y'),
-    //         'penerimaan_bersih_tabungan' => 'Rp ' . number_format($penerimaan_bersih + ($request->tabungan ?? 0), 0, ',', '.'),
-    //     ];
-    // }
+        // dd($bankPersen->dpu);
+        //perhitungan penurunan diskon
+        $plafond = $pinjaman->nominal_pinjaman;
+        $tenor = $pinjaman->bulan; //lama pinjaman
+        $tgl_lahir = $dataAnggota->tgl_lahir;
+        $tgl_realisasi = (new DateTime($pinjaman->tgl_lunas))->sub(new DateInterval('P' . $pinjaman->bulan . 'M'))->format('Y-m-d H:i:s');;
+        $tabungan = $dataAnggota->simpanan_pokok ?? 0;
+
+        // Asli (tanpa diskon)
+        $angsuran_asli = $this->hitungCicilan($plafond, $tenor);
+        $dpu_asli = $this->hitungDPU($plafond, $tgl_lahir, $tgl_realisasi);
+        $jasa_asli = $this->hitungJasa($plafond);
+        $provisi_asli = $this->hitungProvisi($plafond, $tenor);
+        $materai = $this->hitungMaterai();
+        $buku = $this->hitungBuku();
+
+        // Persentase diskon
+        $diskon_angsuran = $bankPersen->angsuran/100; // 5%
+        $diskon_dpu = $bankPersen->dpu/100; // 10%
+        $diskon_jasa = $bankPersen->jasa/100; // 15%
+        $diskon_provisi = $bankPersen->provisis/100; // 5%
+
+        // Setelah diskon
+        $angsuran = $angsuran_asli * (1 - $diskon_angsuran);
+        $dpu = $dpu_asli * (1 - $diskon_dpu);
+        $jasa = $jasa_asli * (1 - $diskon_jasa);
+        $provisi = $provisi_asli * (1 - $diskon_provisi);
+        // Penerimaan bersih
+        $penerimaan_bersih = $plafond - $dpu - $jasa - $buku - $materai - $provisi - $tabungan;
+
+        // Data untuk kwitansi
+        $data = [
+            'nama_petugas' => $petugasName,
+            'nama_nasabah' => $pinjaman->nama_nasabah,
+            'nik' => $pinjaman->nik_nasabah,
+            'tgl_lahir' => $pinjaman->tgl_lahir_nasabah,
+            'usia' => $pinjaman->usia_nasabah,
+            'no_pensiun' => $pinjaman->no_pensiun_nasabah,
+            'jenis_pensiun' => $pinjaman->jenis_pensiun_nasabah,
+            'gaji_awal_sebelum_pot_hbm' => 'Rp ' . number_format(200400, 0, ',', '.'),
+            'alamat' => $pinjaman->alamat_lengkap_nasabah,
+            'no_hp' => $pinjaman->nohp_nasabah,
+            'tanggal_realisasi' => $pinjaman->tanggal_realisasi_formatted,
+            'angsuran' => 'Rp ' . number_format($angsuran, 0, ',', '.'),
+            'sisa_gaji' => 'Rp ' . number_format($dataAnggota->sismpanan_pokok, 0, ',', '.'),
+            'tanggal_lunas' => $pinjaman->tanggal_lunas_formatted,
+            'plafond' => $pinjaman->nominal_pinjaman_formatted,
+            'tenor' => $pinjaman->bulan . ' BULAN',
+            'provisi_biaya' => 'Rp ' . number_format($provisi, 0, ',', '.'),
+            'dpu_asuransi' => 'Rp ' . number_format($dpu, 0, ',', '.'),
+            'jasa_pelayanan' => 'Rp ' . number_format($jasa, 0, ',', '.'),
+            'buku_anggota' => 'Rp ' . number_format($buku, 0, ',', '.'),
+            'materai_biaya' => 'Rp ' . number_format($materai, 0, ',', '.'),
+            'sisa_hutang' => 'Rp -',
+            'penerimaan_bersih' => 'Rp ' . number_format($penerimaan_bersih, 0, ',', '.'),
+            'pengambilan_tabungan_lama' => 'Rp ' . number_format($dataAnggota->simpanan_pokok, 0, ',', '.'),
+            'penerimaan_bersih_tab' => 'Rp ' . number_format($penerimaan_bersih + $dataAnggota->simpanan_pokok, 0, ',', '.'),
+            'current_date' => Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y'),
+            'petugas_name' => $petugasName,
+            'nasabah_name' => $pinjaman->nama_nasabah,
+            'nik_nasabah_kwitansi' => $pinjaman->nik_nasabah,
+            'simpanan_pokok' => $dataAnggota->simpanan_pokok,
+        ];
+
+        // Buat PDF dari view
+        $pdf = Pdf::loadView('admin.pinjaman.kwitansi_template', $data);
+        $dateNow = Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y');
+        // Unduh PDF
+        return $pdf->download('kwitansi_pinjaman_' . $dataAnggota->nama . $dateNow .'.pdf');
+    }
 
     public function generateKwitansiPdf(Request $request, $kode_pinjaman)
     {
         // Ambil data pinjaman berdasarkan kode_pinjaman
         $pinjaman = Pinjaman::with('anggota')->findOrFail($kode_pinjaman);
-
+        // dd($pinjaman);
+        $dataAnggota = Anggota::where('no_anggota', $pinjaman->no_anggota)
+            ->select(
+                'ktp',
+                'simpanan_pokok',
+                'gaji'
+            )
+            ->first();
         // Pastikan session('user') ada sebelum mengakses properti 'name'
         $petugasName = session('user')->name ?? 'DIANA';
 
@@ -338,7 +417,7 @@ class PinjamanController extends Controller
             'no_hp' => $pinjaman->nohp_nasabah,
             'tanggal_realisasi' => $pinjaman->tanggal_realisasi_formatted,
             'angsuran' => $pinjaman->cicilan_perbulan_formatted,
-            'sisa_gaji' => 'Rp ' . number_format(52067, 0, ',', '.'),
+            'sisa_gaji' => 'Rp ' . number_format($dataAnggota->gaji, 0, ',', '.'),
             'tanggal_lunas' => $pinjaman->tanggal_lunas_formatted,
             'plafond' => $pinjaman->nominal_pinjaman_formatted,
             'tenor' => $pinjaman->bulan . ' BULAN',
@@ -349,12 +428,13 @@ class PinjamanController extends Controller
             'materai_biaya' => $pinjaman->materai_formatted,
             'sisa_hutang' => 'Rp -',
             'penerimaan_bersih' => $pinjaman->penerimaan_bersih_formatted,
-            'pengambilan_tabungan_lama' => $pinjaman->penerimaan_bersih_tabungan_formatted,
-            'penerimaan_bersih_tab' => $pinjaman->total_penerimaan_bersih,
+            'pengambilan_tabungan_lama' => 'Rp ' . number_format($dataAnggota->simpanan_pokok, 0, ',', '.'),
+            'penerimaan_bersih_tab' => 'Rp ' . number_format($pinjaman->penerimaan_bersih_tabungan + $dataAnggota->simpanan_pokok, 0, ',', '.'),
             'current_date' => Carbon::now()->locale('id')->isoFormat('dddd, D MMMM Y'),
             'petugas_name' => $petugasName,
             'nasabah_name' => $pinjaman->nama_nasabah,
             'nik_nasabah_kwitansi' => $pinjaman->nik_nasabah,
+            'simpanan_pokok' => $dataAnggota->simpanan_pokok,
         ];
 
         // Buat PDF dari view
@@ -431,3 +511,35 @@ class PinjamanController extends Controller
     }
 
 }
+
+
+    // public function prosesSimulasi($request)
+    // {
+    //     $usia = $this->hitungUsia($request->tgl_lahir, $request->tgl_realisasi);
+    //     $persentase_dpu = $this->hitungPersentaseDPU($request->tgl_lahir, $request->tgl_realisasi);
+    //     $angsuran = $this->hitungCicilan($request->nominal_pinjaman, $request->lama_pinjaman);
+    //     $penerimaan_bersih = $this->hitungPenerimaanBersih(
+    //         $request->nominal_pinjaman,
+    //         $request->tgl_lahir,
+    //         $request->tgl_realisasi,
+    //         $request->lama_pinjaman,
+    //         $request->tabungan ?? 0
+    //     );
+    //     $sisa_gaji = $request->gaji_awal - $angsuran;
+
+    //     return [
+    //         'persentase_dpu'              => $persentase_dpu . '%',
+    //         'usia_masuk'                  => $usia . ' TAHUN',
+    //         'angsuran_per_bulan'          => 'Rp ' . number_format($angsuran, 0, ',', '.'),
+    //         'sisa_gaji'                   => 'Rp ' . number_format($sisa_gaji, 0, ',', '.'),
+    //         'penerimaan_bersih'           => 'Rp ' . number_format($penerimaan_bersih, 0, ',', '.'),
+    //         'dpu_asuransi'                => 'Rp ' . number_format($this->hitungDPU($request->nominal_pinjaman, $request->tgl_lahir, $request->tgl_realisasi), 0, ',', '.'),
+    //         'jasa_pelayanan'              => 'Rp ' . number_format(round($this->hitungJasa($request->nominal_pinjaman)), 0, ',', '.'),
+    //         'buku_anggota'                => 'Rp ' . number_format($this->hitungBuku(), 0, ',', '.'),
+    //         'materai'                    => 'Rp ' . number_format($this->hitungMaterai(), 0, ',', '.'),
+    //         'persentase_provinsi'          => $this->hitungPersentaseProvisi($request->lama_pinjaman) . '%',
+    //         'provisi'                    => 'Rp ' . number_format($this->hitungProvisi($request->nominal_pinjaman, $request->lama_pinjaman), 0, ',', '.'),
+    //         'tanggal_lunas'              => Carbon::parse($request->tgl_realisasi)->addMonths($request->lama_pinjaman)->format('d/m/Y'),
+    //         'penerimaan_bersih_tabungan' => 'Rp ' . number_format($penerimaan_bersih + ($request->tabungan ?? 0), 0, ',', '.'),
+    //     ];
+    // }

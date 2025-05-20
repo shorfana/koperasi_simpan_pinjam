@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('alamat', 255)->nullable();
             $table->string('no_pensiun', 100)->nullable();
             $table->string('jenis_pensiun', 100)->nullable();
+            $table->string('simpanan_pokok', 100)->nullable();
             $table->string('foto', 255)->nullable();
             $table->string('type', 50)->nullable();
             $table->string('status', 50)->nullable();

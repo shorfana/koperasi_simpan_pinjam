@@ -831,11 +831,20 @@
 <script src="{{asset('admin_assets/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 <script>
   $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      "buttons": ["pdf","colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    let table = $("#example1").DataTable({
+      "responsive": true,
+      "lengthChange": false,
+      "autoWidth": false,
+      @if(session('user')->role == 'ADMIN' || session('user')->role == 'PETUGAS_KOPERASI')
+    //   "buttons": ["pdf", "colvis"]
+      "buttons": []
+      @else
+      "buttons": []
+      @endif
+    });
+
+    table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,
@@ -924,6 +933,8 @@
                         $('input[name="alamat"]').val(detail.alamat).prop('readonly', true);
                         $('input[name="no_pensiun"]').val(detail.no_pensiun).prop('readonly', true);
                         $('input[name="jenis_pensiun"]').val(detail.jenis_pensiun).prop('readonly', true);
+                        $('input[name="gaji_awal"]').val(detail.gaji).prop('readonly', true);
+                        $('input[name="simpanan_pokok"]').val(detail.simpanan_pokok).prop('readonly', true);
 
                         $('#provinsi').html(`<option value="${detail.provinsi}" selected>${detail.provinsi}</option>`);
                         $('#nama-provinsi').val(detail.provinsi);
@@ -1040,6 +1051,14 @@
         button.addEventListener('click', function() {
             const kodePinjaman = this.dataset.kodePinjaman;
             window.location.href = `/pinjaman/kwitansi/${kodePinjaman}/pdf`; // Langsung arahkan browser ke URL download
+        });
+    });
+
+    // Event listener untuk tombol Download Kwitansi (per baris) khusus bank
+    document.querySelectorAll('.generate-single-kwitansi-bank').forEach(button => {
+        button.addEventListener('click', function() {
+            const kodePinjaman = this.dataset.kodePinjaman;
+            window.location.href = `/pinjaman/bank_kwitansi/${kodePinjaman}/pdf`; // Langsung arahkan browser ke URL download
         });
     });
 

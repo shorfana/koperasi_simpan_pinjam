@@ -240,6 +240,13 @@
                 <td></td>
             </tr>
             <tr>
+                <td>SIMPANAN POKOKK</td>
+                <td>: {{ $simpanan_pokok }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
                 <td>DPU/ASURANSI</td>
                 <td>: {{ $dpu_asuransi }}</td>
                 <td></td>

@@ -28,18 +28,10 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Persentase DPU</th>
-                    <th>Usia Masuk</th>
-                    <th>Angsuran/Bulan</th>
-                    <th>Penerimaan Bersih</th>
-                    <th>DPU Asuransi</th>
-                    <th>Jasa Pelayanan</th>
-                    <th>Buku Anggota</th>
-                    <th>Materai</th>
-                    <th>Persen Provinsi</th>
-                    <th>Provinsi</th>
-                    <th>Tanggal Lunas</th>
-                    <th>Tabungan Bersih</th>
+                    <th>DPU</th>
+                    <th>Angsuran</th>
+                    <th>Jasa</th>
+                    <th>Provisi</th>
                     <th>Aksi</th>
                 </tr>
                 </thead>
@@ -47,33 +39,17 @@
                 @foreach($bank_persens as $index => $item)
                     <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->persentase_dpu }}</td>
-                    <td>{{ $item->usia_masuk }}</td>
-                    <td>{{ $item->angsuran_per_bulan }}</td>
-                    <td>{{ $item->penerimaan_bersih }}</td>
-                    <td>{{ $item->dpu_asuransi }}</td>
-                    <td>{{ $item->jasa_pelayanan }}</td>
-                    <td>{{ $item->buku_anggota }}</td>
-                    <td>{{ $item->materai }}</td>
-                    <td>{{ $item->persentase_provinsi }}</td>
-                    <td>{{ $item->provinsi }}</td>
-                    <td>{{ $item->tanggal_lunas }}</td>
-                    <td>{{ $item->penerimaan_bersih_tabungan }}</td>
+                    <td>{{ $item->dpu }}</td>
+                    <td>{{ $item->angsuran }}</td>
+                    <td>{{ $item->jasa }}</td>
+                    <td>{{ $item->provisi }}</td>
                     <td>
                         <button class="btn btn-warning btn-sm edit"
                         data-id="{{ $item->id }}"
-                        data-persentase_dpu="{{ $item->persentase_dpu }}"
-                        data-usia_masuk="{{ $item->usia_masuk }}"
-                        data-angsuran_per_bulan="{{ $item->angsuran_per_bulan }}"
-                        data-penerimaan_bersih="{{ $item->penerimaan_bersih }}"
-                        data-dpu_asuransi="{{ $item->dpu_asuransi }}"
-                        data-jasa_pelayanan="{{ $item->jasa_pelayanan }}"
-                        data-buku_anggota="{{ $item->buku_anggota }}"
-                        data-materai="{{ $item->materai }}"
-                        data-persentase_provinsi="{{ $item->persentase_provinsi }}"
-                        data-provinsi="{{ $item->provinsi }}"
-                        data-tanggal_lunas="{{ $item->tanggal_lunas }}"
-                        data-penerimaan_bersih_tabungan="{{ $item->penerimaan_bersih_tabungan }}"
+                        data-dpu="{{ $item->dpu }}"
+                        data-angsuran="{{ $item->angsuran }}"
+                        data-jasa="{{ $item->jasa }}"
+                        data-provisi="{{ $item->provisi }}"
                         >Edit</button>
                         <a href="{{ route('bank-persen.destroy', $item->id) }}" class="btn btn-danger btn-sm">Hapus</a>
                     </td>
@@ -90,63 +66,27 @@
         <form action="{{ route('bank-persen.store') }}" method="POST" class="modal-content">
             @csrf
             <div class="modal-header">
-                <h4 class="modal-title">Edit Data User</h4>
+                <h4 class="modal-title">Tambah Data bank persen</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label>Persentase DPU</label>
-                        <input type="number" name="persentase_dpu" class="form-control" required>
+                        <label>DPU</label>
+                        <input type="number" name="dpu" class="form-control" required>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Usia Masuk</label>
-                        <input type="number" name="usia_masuk" class="form-control" required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Angsuran per Bulan</label>
-                        <input type="number" name="angsuran_per_bulan" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Penerimaan Bersih</label>
-                        <input type="number" name="penerimaan_bersih" class="form-control" required>
+                        <label>Angsuran</label>
+                        <input type="number" name="angsuran" class="form-control" required>
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label>DPU Asuransi</label>
-                        <input type="number" name="dpu_asuransi" class="form-control" required>
+                        <label>Jasa</label>
+                        <input type="number" name="jasa" class="form-control" required>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Jasa Pelayanan</label>
-                        <input type="number" name="jasa_pelayanan" class="form-control" required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Buku Anggota</label>
-                        <input type="number" name="buku_anggota" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Materai</label>
-                        <input type="number" name="materai" class="form-control" required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Persentase Provinsi</label>
-                        <input type="number" name="persentase_provinsi" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Provinsi</label>
-                        <input type="number" name="provinsi" class="form-control" required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Tanggal Lunas</label>
-                        <input type="date" name="tanggal_lunas" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Penerimaan Bersih Tabungan</label>
-                        <input type="number" name="penerimaan_bersih_tabungan" class="form-control" required>
+                        <label>Provisi</label>
+                        <input type="number" name="provisi" class="form-control" required>
                     </div>
                 </div>
             </div>

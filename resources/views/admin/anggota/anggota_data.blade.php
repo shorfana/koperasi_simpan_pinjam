@@ -100,6 +100,10 @@
                                 <label>Tanggal Aktivasi</label>
                                 <input name="tgl_aktivasi" class="form-control" type="date" />
                             </div>
+                            <div class="form-group">
+                                <label>Gaji</label>
+                                <input name="gaji" class="form-control" />
+                            </div>
                         </div>
 
                         <!-- Kolom 2 -->
@@ -163,6 +167,10 @@
                             </div>
                             <div class="form-group">
                                 <label>Jenis Pensiun</label>
+                                <input name="jenis_pensiun" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Simpanan Pokok</label>
                                 <input name="jenis_pensiun" class="form-control" />
                             </div>
                         </div>

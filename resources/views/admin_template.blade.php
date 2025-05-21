@@ -1156,6 +1156,18 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+        $('.edit-bank-persen').on('click', function () {
+            $('#edit-id').val($(this).data('id'));
+            $('#edit-dpu').val($(this).data('dpu'));
+            $('#edit-angsuran').val($(this).data('angsuran'));
+            $('#edit-jasa').val($(this).data('jasa'));
+            $('#edit-provisi').val($(this).data('provisi'));
+            $('#modal-edit-bank').modal('show');
+        });
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

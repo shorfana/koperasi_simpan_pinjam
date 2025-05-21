@@ -8,7 +8,8 @@ class BankPersen extends Model
 {
     use HasFactory;
     protected $table = 'bank_persen';
-    protected $guarded = [];
+    protected $primaryKey = 'id';
+    public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = [

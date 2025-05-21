@@ -50,7 +50,7 @@
           </td> --}}
           <td>
             <a href="#" class="btn btn-sm btn-warning btn-edit" data-id="{{ $a->no_anggota }}"><i class="fas fa-edit"></i></a>
-            <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+            <a href="#" class="btn btn-sm btn-danger btn-delete" data-id="{{ $a->no_anggota }}"><i class="fas fa-trash"></i></a>
           </td>
         </tr>
         @endforeach
@@ -225,7 +225,7 @@
               </div>
               <div class="form-group">
                 <label>No HP</label>
-                <input name="no_hp" id="edit-no_hp" class="form-control" />
+                <input name="nohp" id="edit-no_hp" class="form-control" />
               </div>
               <div class="form-group">
                 <label>Tanggal Aktivasi</label>
@@ -439,7 +439,7 @@ async function loadWilayahEdit(provName, kotaName, kecName, kelName) {
         .then(res => res.json())
         .then(data => {
           // Isi form edit dengan data yang didapat
-          document.getElementById('edit-id').value = data.id;
+          document.getElementById('edit-id').value = data.no_anggota;
           document.getElementById('edit-nip').value = data.nip || '';
           document.getElementById('edit-ktp').value = data.ktp || '';
           document.getElementById('edit-email').value = data.email || '';
@@ -471,6 +471,35 @@ async function loadWilayahEdit(provName, kotaName, kecName, kelName) {
           alert('Gagal mengambil data, coba lagi.');
           console.error(err);
         });
+    });
+  });
+
+  document.querySelectorAll('.btn-delete').forEach(button => {
+    button.addEventListener('click', function () {
+      const id = this.dataset.id;
+      console.log(id);
+      console.log("ini dia");
+
+      // Konfirmasi sebelum menghapus (opsional tapi sangat disarankan)
+        if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+            // Panggil API Laravel Anda
+            // Perhatikan URL-nya: '/api/data/${id}'
+            console.log("kehapus nih");
+            fetch(`/anggota-delete/${id}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Gagal menghapus data.');
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    location.reload(); // reload halaman setelah sukses
+                })
+                .catch(error => {
+                    console.error('Terjadi kesalahan:', error);
+                    alert('Gagal menghapus data.');
+                });
+
+        }
     });
   });
 
@@ -508,7 +537,14 @@ async function loadWilayahEdit(provName, kotaName, kecName, kelName) {
     .then(res => res.json())
     .then(data => {
       if(data.success) {
-        alert('Data berhasil diupdate');
+        // alert('Data berhasil diupdate');
+        Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: data.success,
+        timer: 2500,
+        showConfirmButton: false
+    });
         $('#modal-edit').modal('hide');
         location.reload(); // reload halaman supaya update kelihatan
       } else {

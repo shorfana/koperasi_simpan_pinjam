@@ -38,6 +38,7 @@ class BankPersenController extends Controller
 
     public function update(Request $request, BankPersen $bankPersen)
     {
+        // dd($request);
         $data = $request->validate([
             'dpu' => 'required|integer',
             'angsuran' => 'required|integer',
@@ -45,9 +46,15 @@ class BankPersenController extends Controller
             'provisi' => 'required|integer',
         ]);
 
+        $bankPersen = BankPersen::find($request->id); // cari berdasarkan id dari hidden input
+
+        if (!$bankPersen) {
+            return back()->with('error', 'Data tidak ditemukan');
+        }
+
         $bankPersen->update($data);
 
-        return response()->json($bankPersen);
+        return back()->with('success', 'Bank Persen berhasil Diubah');
     }
 
     public function destroy(BankPersen $bankPersen)

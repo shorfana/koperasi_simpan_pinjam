@@ -33,6 +33,8 @@ Route::middleware(['user.session'])->group(function () {
         Route::post('/anggota', 'store')->name('anggota.store'); // ✅ Tambahkan ini
         Route::put('/anggota/{id}', 'update')->name('anggota.update');
         Route::get('/anggota/{id}/edit', 'edit')->name('anggota.edit');
+        // Route::put('/anggota-delete/{id}','softDeleteItem')->name('anggota-delete.softDeleteItem'); //[ItemController::class, 'softDeleteItem']);
+
 
     });
     Route::controller(UserController::class)->group(function () {
@@ -54,7 +56,7 @@ Route::middleware(['user.session'])->group(function () {
     Route::controller(BankPersenController::class)->group(function () {
         Route::get('/bank-persen', 'show')->name('bank-persen.show');
         Route::post('/bank-persen', 'store')->name('bank-persen.store');
-        Route::post('/bank-persen/update', 'update')->name('bank-persen.update');
+        // Route::post('/bankpersen/update', 'update')->name('bank-persen.update');
         Route::delete('/bank-persen/delete', 'destroy')->name('bank-persen.destroy');
         // Route::get('/bank-persen', 'show')->name('bank-persen.show');            // Tampilkan semua user
         // Route::post('/bank-persen/update', 'update')->name('bank-persen.update');           // Simpan user baru
@@ -62,6 +64,7 @@ Route::middleware(['user.session'])->group(function () {
         // Route::delete('/bank-persen/delete', 'destroy')->name('bank-persen.destroy'); // Hapus user
     });
 });
+    Route::post('/bank-persen/update', [BankPersenController::class, 'update'])->name('bank-persen.update');
 
 
     Route::get('/pinjaman/searchNasabah', [PinjamanController::class, 'searchNasabah'])->name('pinjaman.searchNasabah');
@@ -69,6 +72,8 @@ Route::middleware(['user.session'])->group(function () {
     // Route untuk generate kwitansi PDF tunggal berdasarkan kode_pinjaman
     Route::get('/pinjaman/kwitansi/{kode_pinjaman}/pdf', [PinjamanController::class, 'generateKwitansiPdf'])->name('pinjaman.kwitansi.single');
     Route::get('/pinjaman/bank_kwitansi/{kode_pinjaman}/pdf', [PinjamanController::class, 'generateBankKwitansiPdf'])->name('pinjaman.kwitansi.single');
+    Route::get('/anggota-delete/{id}', [AnggotaController::class, 'softDeleteItem'])->name('anggota-delete.softDeleteItem');
+    // Route::get('/anggota-delete/{id}', 'softDeleteItem')->name('anggota-delete.softDeleteItem');
 
     // Route untuk generate kwitansi PDF multiple (zipped) berdasarkan array kode_pinjaman
     Route::post('/pinjaman/kwitansi/multiple/pdf', [PinjamanController::class, 'generateMultipleKwitansiPdf'])->name('pinjaman.kwitansi.multiple');

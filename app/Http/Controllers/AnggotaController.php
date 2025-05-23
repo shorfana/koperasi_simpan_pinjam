@@ -171,46 +171,23 @@ class AnggotaController extends Controller
         ]);
     }
 
-    public function softDeleteItem(Request $request, $no_anggota)
+    public function delete($anggota)
     {
-        // Validasi data yang diterima
-        // Pastikan 'is_deleted' ada di body request dan bernilai 1
-
-
         try {
-            // Cari anggota berdasarkan no_anggota
-            // Karena primaryKey adalah 'no_anggota' dan tidak incrementing,
-            // find() akan bekerja dengan baik.
-            $anggota = Anggota::find($no_anggota);
-            // dd("halo");
-            // var_dump("testst");
-            if (!$anggota) {
-                return response()->json(['message' => 'Data anggota tidak ditemukan.'], 404);
-            }
-            // Cek apakah anggota masih memiliki pinjaman
             $hasPinjaman = DB::table('anggota as a')
                         ->join('pinjaman as p', 'a.no_anggota', '=', 'p.no_anggota')
-                        ->where('a.no_anggota', $no_anggota)
+                        ->where('a.no_anggota', $anggota)
                         ->exists();
 
             if ($hasPinjaman) {
-                return response()->json(['message' => 'Anggota sedang memiliki pinjaman aktif. Harap selesaikan pinjaman terlebih dahulu.', 'anggota' => $anggota], 200);
+                return redirect()->back()->with('success', 'Anggota sedang memiliki pinjaman aktif. Harap selesaikan pinjaman terlebih dahulu.');
             }
 
-            // // Update kolom is_deleted menjadi 1
-            $anggota->is_deleted = "1";
-            $anggota->save(); // Simpan perubahan ke database
-
-            return response()->json(['message' => 'Data anggota berhasil di delete.', 'anggota' => $anggota], 200);
+            Anggota::where('no_anggota', $anggota)->update(['is_deleted' => '1']);
+            return redirect()->back()->with('success', 'Data anggota berhasil dihapus.');
 
         } catch (\Exception $e) {
-            // Log error untuk debugging
-            Log::error('Kesalahan saat melakukan soft delete anggota: ' . $e->getMessage(), ['no_anggota' => $no_anggota, 'request_body' => $request->all()]);
-
-            return response()->json([
-                'message' => 'Terjadi kesalahan server saat menghapus data anggota.',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('success', 'Data anggota gagal dihapus.');
         }
     }
 }

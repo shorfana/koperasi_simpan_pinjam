@@ -18,6 +18,7 @@ class Anggota extends Model
         'kelurahan', 'alamat','no_pensiun', 'jenis_pensiun', 'simpanan_pokok' ,'foto', 'type', 'status', 'is_deleted',
         'createdon', 'createdby', 'modifiedon', 'modifiedby','gaji'
     ];
+    
 
     protected $casts = [
         'simpanan_wajib' => 'float',

@@ -17,9 +17,13 @@
   </div>
   <div class="card-body">
         <div class="mb-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
+            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
                 Tambah Anggota
-            </button>
+            </button> -->
+            
+            <div id="customAddBtnWrapper" style="display: none;">
+            <button class="btn btn-primary" id="btnTambah" data-toggle="modal" data-target="#modal-add">Tambah</button>
+            </div>
         </div>
     <table id="example1" class="table table-bordered table-striped">
       <thead>
@@ -49,8 +53,12 @@
             @endif
           </td> --}}
           <td>
-            <a href="#" class="btn btn-sm btn-warning btn-edit" data-id="{{ $a->no_anggota }}"><i class="fas fa-edit"></i></a>
-            <a href="#" class="btn btn-sm btn-danger btn-delete" data-id="{{ $a->no_anggota }}"><i class="fas fa-trash"></i></a>
+            <a href="#" class="btn btn-sm btn-warning btn-edit" data-id="{{ $a->no_anggota }}"><i class="fas fa-edit"></i></a>|
+            <a href="{{ route('anggota-delete.delete', $a->no_anggota) }}"
+                    class="btn btn-sm btn-danger"
+                    onclick="return confirm('Are you sure you want to delete this user?')">
+                        <i class="fas fa-trash"></i>
+                  </a>
           </td>
         </tr>
         @endforeach

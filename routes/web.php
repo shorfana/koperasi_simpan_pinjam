@@ -25,6 +25,7 @@ use App\Http\Controllers\BankPersenController;
 // Route::get('/dashboard', [DashboardController::class, 'show']);
 // Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
 // Route yang butuh login session
+
 Route::middleware(['user.session'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
     Route::controller(AnggotaController::class)->group(function () {
@@ -72,11 +73,19 @@ Route::middleware(['user.session'])->group(function () {
     // Route untuk generate kwitansi PDF tunggal berdasarkan kode_pinjaman
     Route::get('/pinjaman/kwitansi/{kode_pinjaman}/pdf', [PinjamanController::class, 'generateKwitansiPdf'])->name('pinjaman.kwitansi.single');
     Route::get('/pinjaman/bank_kwitansi/{kode_pinjaman}/pdf', [PinjamanController::class, 'generateBankKwitansiPdf'])->name('pinjaman.kwitansi.single');
-    Route::get('/anggota-delete/{id}', [AnggotaController::class, 'softDeleteItem'])->name('anggota-delete.softDeleteItem');
+    Route::get('/anggota-delete/{id}', [AnggotaController::class, 'delete'])->name('anggota-delete.delete');
     // Route::get('/anggota-delete/{id}', 'softDeleteItem')->name('anggota-delete.softDeleteItem');
 
     // Route untuk generate kwitansi PDF multiple (zipped) berdasarkan array kode_pinjaman
     Route::post('/pinjaman/kwitansi/multiple/pdf', [PinjamanController::class, 'generateMultipleKwitansiPdf'])->name('pinjaman.kwitansi.multiple');
+    Route::get('/pinjaman/{no_anggota}/edit', [PinjamanController::class, 'edit'])->name('pinjaman.edit');
+
+    // Rute untuk mengirim data pembaruan pinjaman dari form modal
+    // Ini akan dipanggil saat form di modal disubmit dengan method PUT
+    Route::put('/pinjaman/{kode_pinjaman}', [PinjamanController::class, 'update'])->name('pinjaman.update');
+    Route::get('/pinjaman/{kode_pinjaman}/delete', [PinjamanController::class, 'delete'])->name('pinjaman.delete');
+
+    Route::get('/users/{user}/delete', [UserController::class, 'delete'])->name('users.delete');
 
 // Route::controller(AuthController::class)->group(function () {
 //     Route::get('/login', 'login_show');
@@ -92,3 +101,5 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 
+//data dashboard
+Route::get('/dashboard/loans', [DashboardController::class, 'showMonthlyLoansChart']);

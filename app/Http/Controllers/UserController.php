@@ -13,7 +13,7 @@ class UserController extends Controller
     // Tampilkan semua user
     public function index()
 {
-    $users = User::all();
+    $users = User::where('is_deleted', 0)->get();
     $roles = Role::all(); // Ambil semua data roles
 
     return view('admin.user.index', compact('users', 'roles'),['title' => 'Data User']);
@@ -39,6 +39,7 @@ class UserController extends Controller
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        $validated['is_deleted'] = "0"; // Add this line to set is_deleted to "0"
 
         User::create($validated);
 
@@ -86,9 +87,16 @@ class UserController extends Controller
     }
 
     // Hapus user
-    public function destroy(User $user)
+    public function delete(User $user)
     {
-        $user->delete();
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        // dd($user);
+        // Update the 'is_deleted' column to 1
+        $user->update(['is_deleted' => 1]);
+
+        // You can add a success message to the session
+        session()->flash('success', 'User ' . $user->name . ' has been soft deleted successfully.');
+
+        // Redirect back to the user list or wherever appropriate
+        return redirect()->back(); // Or redirect()->route('users.index');
     }
 }

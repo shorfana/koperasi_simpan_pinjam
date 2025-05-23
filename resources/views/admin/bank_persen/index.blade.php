@@ -22,9 +22,13 @@
         <div class="mb-3">
             @if($bank_persens->isEmpty())
                 <div class="mb-3">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
+                    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
                         Tambah Bank Persen
-                    </button>
+                    </button> -->
+                    
+                    <div id="customAddBtnWrapper" style="display: none;">
+                    <button class="btn btn-primary" id="btnTambah" data-toggle="modal" data-target="#modal-add">Tambah</button>
+                    </div>
                 </div>
             @endif
             {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">

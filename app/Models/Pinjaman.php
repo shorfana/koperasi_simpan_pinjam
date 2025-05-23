@@ -22,39 +22,67 @@ class Pinjaman extends Model
 
     // Tidak menggunakan timestamps default (created_at, updated_at)
     public $timestamps = false;
-
     protected $fillable = [
         'kode_pinjaman',
         'tanggal',
         'jenis_kode_kas',
         'no_anggota',
-        'pinjaman',
         'nominal_pinjaman',
+        'pinjaman', // Perhatikan ini. Di request ada 'nominal_pinjaman', tapi juga ada 'pinjaman' di create()
         'tgl_jatuh_tempo',
+        'tgl_realisasi',
         'keterangan',
         'bulan',
         'cicilan_perbulan',
         'status',
         'createdon',
         'createdby',
-        'modifiedon',
-        'modifiedby',
         'is_deleted',
-
-        // Kolom tambahan
-        'persentase_dpu',
         'usia_masuk',
-        'angsuran_per_bulan',
-        'penerimaan_bersih',
+        'persentase_dpu',
         'dpu_asuransi',
         'jasa_pelayanan',
         'buku_anggota',
         'materai',
         'persentase_provisi',
         'provisi',
+        'angsuran_per_bulan',
+        'penerimaan_bersih',
         'tanggal_lunas',
         'penerimaan_bersih_tabungan',
     ];
+    // protected $fillable = [
+    //     'kode_pinjaman',
+    //     'tanggal',
+    //     'jenis_kode_kas',
+    //     'no_anggota',
+    //     'pinjaman',
+    //     'nominal_pinjaman',
+    //     'tgl_jatuh_tempo',
+    //     'keterangan',
+    //     'bulan',
+    //     'cicilan_perbulan',
+    //     'status',
+    //     'createdon',
+    //     'createdby',
+    //     'modifiedon',
+    //     'modifiedby',
+    //     'is_deleted',
+
+    //     // Kolom tambahan
+    //     'persentase_dpu',
+    //     'usia_masuk',
+    //     'angsuran_per_bulan',
+    //     'penerimaan_bersih',
+    //     'dpu_asuransi',
+    //     'jasa_pelayanan',
+    //     'buku_anggota',
+    //     'materai',
+    //     'persentase_provisi',
+    //     'provisi',
+    //     'tanggal_lunas',
+    //     'penerimaan_bersih_tabungan',
+    // ];
 
     // Relasi ke model Anggota
     public function anggota()

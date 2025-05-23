@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KOPERASI HANDAL </title>
+  <title>KOPERASI SIMPAN PINJAM </title>
   <link rel="icon" type="image/png" href="https://pasla.jambiprov.go.id/wp-content/uploads/2023/02/lambang-koperasi.png">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -48,15 +48,15 @@
       <!-- Navbar Search -->
 
       <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
+      <!-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
           <span class="badge badge-danger navbar-badge">3</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
+          <a href="#" class="dropdown-item"> -->
             <!-- Message Start -->
-            <div class="media">
+            <!-- <div class="media">
               <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
@@ -66,13 +66,13 @@
                 <p class="text-sm">Call me whenever you can...</p>
                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
               </div>
-            </div>
+            </div> -->
             <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <!-- </a> -->
+          <!-- <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item"> -->
             <!-- Message Start -->
-            <div class="media">
+            <!-- <div class="media">
               <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
@@ -82,13 +82,13 @@
                 <p class="text-sm">I got your message bro</p>
                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
               </div>
-            </div>
+            </div> -->
             <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <!-- </a> -->
+          <!-- <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item"> -->
             <!-- Message Start -->
-            <div class="media">
+            <!-- <div class="media">
               <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
@@ -98,15 +98,15 @@
                 <p class="text-sm">The subject goes here</p>
                 <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
               </div>
-            </div>
+            </div> -->
             <!-- Message End -->
-          </a>
+          <!-- </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
-      </li>
+      </li> -->
       <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
+      <!-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">15</span>
@@ -131,7 +131,7 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
-      </li>
+      </li> -->
 
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -155,8 +155,11 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <!-- <a href="index3.html" class="brand-link"> -->
       <!-- <img src="{{asset('admin_assets/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+      <!-- <span class="brand-text font-weight-light">KOPERASI</span>
+    </a> -->
+    <a href="index3.html" class="brand-link d-block text-center">
       <span class="brand-text font-weight-light">KOPERASI</span>
     </a>
 
@@ -191,7 +194,7 @@
                with font-awesome or any other icon font library -->
 
           <li class="nav-item">
-            <a href="https://adminlte.io/docs/3.1/" class="nav-link">
+            <a href="/" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>DASHBOARD</p>
             </a>
@@ -231,15 +234,15 @@
                     <p>Data</p>
                 </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                 <a href="/history-data" class="nav-link {{ request()->is('history-data') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>History</p>
                 </a>
-                </li>
+                </li> -->
             </ul>
             </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-database"></i>
               <p>
@@ -259,15 +262,15 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Jenis Simpanan</p>
                 </a>
-              </li>
+              </li> -->
               <!-- <li class="nav-item">
                 <a href="/permohonan-penarikan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Permohonan Penarikan</p>
                 </a>
               </li> -->
-            </ul>
-          </li>
+            <!-- </ul>
+          </li> -->
             @endif
             {{-- PINJAMAN --}}
             <li class="nav-item {{ request()->is('pinjaman') || request()->is('jenis-pinjaman') || request()->is('pembayaran') || request()->is('informasi-pinjaman') ? 'menu-open' : '' }}">
@@ -287,7 +290,7 @@
                     <p>Informasi Pinjaman</p>
                 </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                 <a href="/jenis-pinjaman" class="nav-link {{ request()->is('jenis-pinjaman') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Jenis Pinjaman</p>
@@ -298,7 +301,7 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pembayaran</p>
                 </a>
-                </li>
+                </li> -->
                 @endif
 
                 {{-- Informasi Pinjaman Bank - semua bisa lihat --}}
@@ -393,7 +396,7 @@
             </ul>
           </li> -->
             @if(session('user')->role != 'PETUGAS_BANK')
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-university"></i>
               <p>
@@ -407,14 +410,14 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Tabungan</p>
                 </a>
-              </li>
+              </li> -->
               <!-- <li class="nav-item">
                 <a href="./index3.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Permohonan Penarikan</p>
                 </a>
               </li> -->
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="./index2.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Kredit</p>
@@ -431,7 +434,7 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Jenis Rekening </p>
                 </a>
-              </li>
+              </li> -->
               <!-- <li class="nav-item">
                 <a href="./index3.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -444,8 +447,8 @@
                   <p>Jenis Pinjaman </p>
                 </a>
               </li> -->
-            </ul>
-          </li>
+            <!-- </ul>
+          </li> -->
             @endif
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
@@ -611,7 +614,7 @@
               </li>
             </ul>
           </li> -->
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file-import"></i>
               <p>
@@ -627,7 +630,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file-alt"></i>
@@ -832,31 +835,46 @@
 <script>
   $(function () {
     let table = $("#example1").DataTable({
-      "responsive": true,
-      "lengthChange": false,
-      "autoWidth": false,
-      @if(session('user')->role == 'ADMIN' || session('user')->role == 'PETUGAS_KOPERASI')
-    //   "buttons": ["pdf", "colvis"]
-      "buttons": []
-      @else
-      "buttons": []
-      @endif
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false,
+        @if(session('user')->role == 'ADMIN' || session('user')->role == 'PETUGAS_KOPERASI')
+        "buttons": []
+        @else
+        "buttons": []
+        @endif
+    });
+
+    // Pindahkan tombol ke sebelah search bar
+    $('#customAddBtnWrapper').appendTo('#example1_wrapper .col-md-6:eq(0)').css({
+        'display': 'inline-block',
+        'margin-right': '10px'
+    });
+
+    $('#generateSelectedKwitansi').appendTo('#example1_wrapper .col-md-6:eq(0)').css({
+        'display': 'inline-block',
+        'margin-right': '10px'
+    });
+
+    $('#generateAllKwitansi').appendTo('#example1_wrapper .col-md-6:eq(0)').css({
+        'display': 'inline-block',
+        'margin-right': '10px'
     });
 
     table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
     $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
     });
-  });
+});
 </script>
-{{-- Script untuk isi form edit --}}
+{{-- Script untuk isi form edit user --}}
 <script>
     $(document).ready(function() {
         $('.btn-edit-user').on('click', function() {
@@ -878,6 +896,8 @@
         });
     });
 </script>
+{{-- end  Script untuk isi form edit user --}}
+<!-- script autoload nasabah pada menu pinjaman -->
 <script>
         $(document).ready(function () {
             // Auto Suggest Nasabah
@@ -1036,8 +1056,10 @@
             // Load provinsi pertama kali
             resetForm();
         });
-    </script>
-       <script>
+</script>
+<!-- end script autoload nasabah -->
+<!-- script untuk gengerate kwitansi -->
+<script>
     // Event listener untuk checkbox "Pilih Semua"
     document.getElementById('selectAll').addEventListener('change', function() {
         const checkboxes = document.querySelectorAll('.row-checkbox');
@@ -1156,6 +1178,7 @@
         });
     });
 </script>
+<!-- end script generate kwitansi -->
 <script>
     $(document).ready(function () {
         $('.edit-bank-persen').on('click', function () {
@@ -1168,7 +1191,120 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Event listener untuk tombol Edit
+        $('.btn-edit-pinjaman').on('click', function() {
+            var noAnggota = $(this).data('no-anggota'); // Ambil no_anggota dari tombol edit
+
+            // Lakukan AJAX request untuk mendapatkan detail data pinjaman
+            $.ajax({
+                url: '/pinjaman/' + noAnggota + '/edit', // Sesuaikan dengan route API Anda
+                method: 'GET',
+                success: function(data) {
+                    console.log("Data diterima dari server:", data);
+
+                    // Mengisi nilai-nilai pada form modal edit
+                    // Data Petugas (readonly)
+                    $('#edit-nama-petugas').val(data.createdby);
+
+                    // Data Anggota (readonly) - Menggunakan Accessor dari Model Pinjaman
+                    $('#edit-nama-nasabah').val(data.anggota.nama);
+                    $('#edit-nik').val(data.anggota.ktp).prop('readonly', true);
+                    $('#edit-tgl-lahir').val(data.anggota.tgl_lahir?.split('T')[0]).prop('readonly', true);// Menggunakan accessor tgl_lahir_nasabah
+                    $('#edit-nohp').val(data.anggota.nohp).prop('readonly', true);
+                    $('#edit-alamat').val(data.anggota.alamat).prop('readonly', true); // Menggunakan accessor alamat_lengkap_nasabah
+                    $('#edit-simpanan-pokok').val(data.anggota.simpanan_pokok); // Pastikan ini dari anggota
+                    $('#edit-no-pensiun').val(data.anggota.no_pensiun).prop('readonly', true);
+                    $('#edit-jenis-pensiun').val(data.anggota.jenis_pensiun).prop('readonly', true);
+                    $('#edit-no-anggota').val(data.anggota.no_anggota);
+                    $('#edit-nip-anggota').val(data.anggota.nip); // Mengakses properti `nip` dari relasi `anggota`
+
+                    // Mengisi input teks untuk lokasi (readonly) - Menggunakan Accessor dari Model Pinjaman
+                    $('#edit-provinsi-text').val(data.anggota.provinsi); // Akses langsung dari relasi anggota
+                    $('#edit-nama-provinsi').val(data.anggota.provinsi); // Untuk dikirim saat submit
+                    $('#edit-kota-text').val(data.anggota.kota);
+                    $('#edit-nama-kota').val(data.anggota.kota);
+                    $('#edit-kecamatan-text').val(data.anggota.kecamatan);
+                    $('#edit-nama-kecamatan').val(data.anggota.kecamatan);
+                    $('#edit-kelurahan-text').val(data.anggota.kelurahan);
+                    $('#edit-nama-kelurahan').val(data.anggota.kelurahan);
+
+                    // Data Pinjaman (yang bisa diubah)
+                    $('#edit-kode-pinjaman').val(data.kode_pinjaman);
+                    $('#edit-jaminan').val(data.jaminan); // Jaminan dari tabel pinjaman
+                    $('#edit-gaji-awal-anggota').val(data.anggota.gaji); // Gaji dari anggota (readonly)
+                    $('#edit-nominal-pinjaman').val(formatRupiah(data.nominal_pinjaman ? data.nominal_pinjaman.toString() : '', 'Rp '));
+                    $('#edit-lama-pinjaman').val(data.bulan); // Menggunakan 'bulan' dari model Pinjaman
+                    $('#edit-tgl-realisasi').val(data.tanggal); // Menggunakan 'tanggal' dari model Pinjaman
+                    $('#edit-pengambilan-tabungan').val(data.penerimaan_bersih_tabungan); // Menggunakan kolom penerimaan_bersih_tabungan
+                    $('#edit-sisa-hutang').val(data.nominal_pinjaman - (data.cicilan_perbulan * data.bulan)); // Contoh perhitungan sisa hutang
+                    $('#edit-keterangan').val(data.keterangan);
+
+
+                    // Set action form ke route update dengan kode_pinjaman
+                    $('#editForm').attr('action', '/pinjaman/' + data.kode_pinjaman);
+
+                    // Tampilkan modal edit
+                    $('#modal-edit').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Gagal mengambil data pinjaman. Silakan coba lagi!',
+                    });
+                }
+            });
+        });
+
+        // --- Fungsi Format Mata Uang ---
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+        }
+
+        // Event listener untuk input nominal_pinjaman di modal edit
+        $('#edit-nominal-pinjaman').on('keyup', function(e) {
+            $(this).val(formatRupiah($(this).val(), 'Rp '));
+        });
+
+        // Saat form disubmit, hapus format mata uang agar bisa disimpan sebagai angka
+        $('#editForm').on('submit', function() {
+            let nominalPinjaman = $('#edit-nominal-pinjaman').val();
+            if (nominalPinjaman) {
+                nominalPinjaman = nominalPinjaman.replace(/Rp /g, '').replace(/\./g, '').replace(/,/g, '.');
+                $('#edit-nominal-pinjaman').val(nominalPinjaman);
+            }
+            // Hapus format mata uang dari field lain jika ada (misal: pengambilan_tabungan, sisa_hutang)
+            let pengambilanTabungan = $('#edit-pengambilan-tabungan').val();
+            if (pengambilanTabungan) {
+                pengambilanTabungan = pengambilanTabungan.replace(/Rp /g, '').replace(/\./g, '').replace(/,/g, '.');
+                $('#edit-pengambilan-tabungan').val(pengambilanTabungan);
+            }
+            let sisaHutang = $('#edit-sisa-hutang').val();
+            if (sisaHutang) {
+                sisaHutang = sisaHutang.replace(/Rp /g, '').replace(/\./g, '').replace(/,/g, '.');
+                $('#edit-sisa-hutang').val(sisaHutang);
+            }
+        });
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
